@@ -6,7 +6,7 @@ import scala.scalanative.unsafe.*
 
 object Http {
   def get(url: String): String = Zone { implicit z =>
-    stdlib.system(toCString(s"curl $url > tmp.json"))
-    Source.fromFile("tmp.json").getLines().mkString("\n")
+    stdlib.system(toCString(s"curl $url > s${Constants.tmpFile}"))
+    Source.fromFile(Constants.tmpFile).getLines().mkString("\n")
   }
 }
