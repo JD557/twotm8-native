@@ -33,4 +33,4 @@ metals.sbt
 null/
 
 # App specific
-tmp.json
+cache.json
