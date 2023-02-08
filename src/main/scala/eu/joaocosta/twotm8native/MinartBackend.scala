@@ -8,6 +8,8 @@ import microuilib.functions.*
 import microuilib.types.*
 
 import eu.joaocosta.minart.backend.defaults.*
+import eu.joaocosta.minart.input.*
+import eu.joaocosta.minart.input.KeyboardInput.Key
 import eu.joaocosta.minart.graphics.*
 import eu.joaocosta.minart.graphics.image.*
 import eu.joaocosta.minart.runtime.*
@@ -38,7 +40,10 @@ object MinartBackend extends Backend {
 
   private val background = Image.loadBmpImage(Resource("bg.bmp")).get
   private def renderBackground(canvas: Canvas): Unit = {
-    canvas.blit(background)(0, 0)
+    canvas.blit(background)(
+      (Constants.screenWidth - background.width) / 2,
+      (Constants.screenHeight - background.height) / 2
+    )
   }
 
   /** Helper function to load microui colors */
@@ -82,7 +87,12 @@ object MinartBackend extends Backend {
         }
       }
       .configure(
-        Canvas.Settings(Constants.screenWidth, Constants.screenHeight, title = "Twotm8 Native"),
+        Canvas.Settings(
+          Constants.screenWidth,
+          Constants.screenHeight,
+          title = "Twotm8 Native",
+          clearColor = Color(155, 160, 220)
+        ),
         LoopFrequency.hz60
       )
       .run()
@@ -100,6 +110,15 @@ object MinartBackend extends Backend {
         mu_input_mousedown(ctx, pos.x, pos.y, MU_MOUSE_LEFT.toInt)
       case (pos, false) =>
         mu_input_mouseup(ctx, pos.x, pos.y, MU_MOUSE_LEFT.toInt)
+    }
+
+    // Switch fullscreen, just because I think it's fun
+    if (backCtx.canvas.getKeyboardInput().keysPressed(Key.F)) {
+      val oldSettings = backCtx.canvas.canvasSettings
+      if (oldSettings.fullScreen)
+        backCtx.canvas.changeSettings(oldSettings.copy(fullScreen = false, scale = 1))
+      else
+        backCtx.canvas.changeSettings(oldSettings.copy(fullScreen = true, scale = 2))
     }
   }
 
