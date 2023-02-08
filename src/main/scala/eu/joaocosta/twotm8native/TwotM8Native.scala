@@ -10,11 +10,6 @@ import scala.io.Source
 import io.circe.*
 import io.circe.syntax.*
 
-import eu.joaocosta.minart.backend.defaults.*
-import eu.joaocosta.minart.runtime.*
-import eu.joaocosta.minart.graphics.*
-import eu.joaocosta.minart.graphics.image.*
-
 object TwotM8Native {
   def getUser(user: String): User =
     val res = Http.get(s"${Constants.host}/api/thought_leaders/$user")
@@ -28,7 +23,7 @@ object TwotM8Native {
   var state =
     State(Constants.defaultUsers.map(getUser), None)
 
-  def appDefinition(ctx: Ptr[mu_Context])(implicit z: Zone): Unit = {
+  def appDefinition(ctx: Ptr[mu_Context])(using z: Zone): Unit = {
     mu_begin(ctx)
     if (mu_begin_window_ex(ctx, c"Users List", mu_rect(10, 10, 180, 300), 0) != 0) {
       if (mu_button_ex(ctx, c"Sync Users", 0, 0) != 0) {
@@ -90,19 +85,9 @@ object TwotM8Native {
       }
     }
 
-    AppLoop
-      .statelessRenderLoop { (canvas: Canvas) =>
-        frameCounter()
-        Zone { implicit z =>
-          appDefinition(ctx)
-          Backend.handleInput(canvas, ctx)
-          Backend.renderCommands(canvas, ctx)
-        }
-      }
-      .configure(
-        Canvas.Settings(Constants.screenWidth, Constants.screenHeight, title = "Twotm8 Native"),
-        LoopFrequency.hz60
-      )
-      .run()
+    Backend.loop(ctx) {
+      frameCounter()
+      appDefinition(ctx)
+    }
   }
 }

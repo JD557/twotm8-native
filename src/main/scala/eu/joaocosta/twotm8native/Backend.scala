@@ -17,7 +17,23 @@ object Backend {
   val font       = SpriteSheet(Image.loadBmpImage(Resource("gloop.bmp")).get, Constants.fontWidth, Constants.fontHeight)
   val background = Image.loadBmpImage(Resource("bg.bmp")).get
 
-  def handleInput(canvas: Canvas, ctx: Ptr[mu_Context])(implicit z: Zone): Unit = {
+  def loop(ctx: Ptr[mu_Context])(appCode: Zone ?=> Unit): Unit = {
+    AppLoop
+      .statelessRenderLoop { (canvas: Canvas) =>
+        Zone { implicit z =>
+          appCode
+          handleInput(canvas, ctx)
+          renderCommands(canvas, ctx)
+        }
+      }
+      .configure(
+        Canvas.Settings(Constants.screenWidth, Constants.screenHeight, title = "Twotm8 Native"),
+        LoopFrequency.hz60
+      )
+      .run()
+  }
+
+  def handleInput(canvas: Canvas, ctx: Ptr[mu_Context])(using z: Zone): Unit = {
     val pointerInput = canvas.getPointerInput()
 
     pointerInput.position.foreach(pos => mu_input_mousemove(ctx, pos.x, pos.y))
