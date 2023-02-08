@@ -85,7 +85,7 @@ object TwotM8Native {
       }
     }
 
-    Backend.run(ctx) {
+    MinartBackend.run(ctx) {
       frameCounter()
       appDefinition(ctx)
     }
