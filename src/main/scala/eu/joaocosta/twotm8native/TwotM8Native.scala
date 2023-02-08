@@ -85,7 +85,7 @@ object TwotM8Native {
       }
     }
 
-    Backend.loop(ctx) {
+    Backend.run(ctx) {
       frameCounter()
       appDefinition(ctx)
     }
