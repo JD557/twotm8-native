@@ -51,8 +51,9 @@ object TwotM8Native {
           mu_label(ctx, toCString(user.nickname))
           mu_label(ctx, toCString(s"${user.twots.size} twots"))
           if (mu_header_ex(ctx, c"Twots", 0) != 0) {
-            mu_layout_row(ctx, 1, Array(-1).at(0), 0)
+            mu_layout_row(ctx, 2, Array(32, -1).at(0), 0)
             user.twots.foreach { twot =>
+              mu_label(ctx, toCString(s"~${twot.uwotm8Count}"))
               mu_text(ctx, toCString(twot.content))
             }
           }
@@ -60,6 +61,20 @@ object TwotM8Native {
       mu_end_window(ctx)
     }
     mu_end(ctx)
+  }
+
+  val frameCounter = {
+    var frameNumber: Int = 0
+    var timer            = System.currentTimeMillis
+    () => {
+      frameNumber += 1
+      if (frameNumber % 10 == 0) {
+        val currTime = System.currentTimeMillis()
+        val fps      = 10.0 / ((currTime - timer) / 1000.0)
+        println("FPS:" + fps)
+        timer = System.currentTimeMillis()
+      }
+    }
   }
 
   @main def main = {
@@ -71,22 +86,8 @@ object TwotM8Native {
     }
     (!ctx).text_height = CFuncPtr1.fromScalaFunction { _ => Constants.fontHeight }
 
-    val frameCounter = {
-      var frameNumber: Int = 0
-      var timer            = System.currentTimeMillis
-      () => {
-        frameNumber += 1
-        if (frameNumber % 10 == 0) {
-          val currTime = System.currentTimeMillis()
-          val fps      = 10.0 / ((currTime - timer) / 1000.0)
-          println("FPS:" + fps)
-          timer = System.currentTimeMillis()
-        }
-      }
-    }
-
     MinartBackend.run(ctx) {
-      frameCounter()
+      // frameCounter() // Uncomment to show the FPS
       appDefinition(ctx)
     }
   }
