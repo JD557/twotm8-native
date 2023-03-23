@@ -106,9 +106,9 @@ object MinartBackend extends Backend {
 
     pointerInput.position.foreach(pos => mu_input_mousemove(ctx, pos.x, pos.y))
     pointerInput.events.foreach {
-      case (pos, true) =>
+      case PointerInput.Event.Pressed(pos) =>
         mu_input_mousedown(ctx, pos.x, pos.y, MU_MOUSE_LEFT.toInt)
-      case (pos, false) =>
+      case PointerInput.Event.Released(pos) =>
         mu_input_mouseup(ctx, pos.x, pos.y, MU_MOUSE_LEFT.toInt)
     }
 
@@ -138,9 +138,8 @@ object MinartBackend extends Backend {
 
   /** Processes a `MU_COMMAND_RECT` command */
   protected def renderRect(backCtx: BackendContext, command: mu_Command): Unit = {
-    val color   = loadColor(command.rect.color)
-    val surface = Plane.fromConstant(color).clip(0, 0, command.rect.rect.w, command.rect.rect.h)
-    backCtx.canvas.blit(surface)(command.rect.rect.x, command.rect.rect.y)
+    val color = loadColor(command.rect.color)
+    backCtx.canvas.fillRegion(command.rect.rect.x, command.rect.rect.y, command.rect.rect.w, command.rect.rect.h, color)
   }
 
   /** Processes a `MU_COMMAND_ICON` command */
