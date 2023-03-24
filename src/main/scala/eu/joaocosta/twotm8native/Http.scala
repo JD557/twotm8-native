@@ -69,7 +69,7 @@ object Http {
     def removeRoot(o: Object): Unit = references.remove(o)
 
   private object Captured:
-    def unsafe[D: Tag, A](value: D)(use: Ptr[D] => A): A =
+    inline def unsafe[D: Tag, A](value: D)(inline use: Ptr[D] => A): A =
       import scalanative.runtime.*
 
       val rawptr = libc.malloc(sizeof[D])
