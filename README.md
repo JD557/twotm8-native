@@ -10,9 +10,9 @@ The application connects to [Twotm8](https://github.com/keynmol/twotm8) and show
 
 ## Notes:
 
-The HTTP client is a pretty naive implementation that assumes that you have `curl` installed and in your path (see the `Http.scala` file).
-A real application would use a serious HTTP client, but since this is just a demo...
-
 The default `MinartBackend` expects `libSDL` to be installed.
+
+The `LibCurlHttp` HTTP client requires `libcurl` to be installed.
+If for some reason you have problems linking `libcurl`, there's a naive `BinCurlHttp` client that calls the `curl` executable. You can use it by simply updating the `TwotM8Native.scala` to use that client instead.
 
 The microui bindings come from https://github.com/keynmol/microuilib-scala-native-demo
