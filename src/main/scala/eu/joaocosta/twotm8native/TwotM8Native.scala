@@ -13,8 +13,8 @@ import io.circe.syntax.*
 object TwotM8Native {
   def getUser(user: String): User =
     // Use BinCurlHttp if you don't want to link libcurl
-    // val res = BinCurlHttp.get(s"${Constants.host}/api/thought_leaders/$user")
-    val res = LibCurlHttp.get(s"${Constants.host}/api/thought_leaders/$user")
+    val res = BinCurlHttp.get(s"${Constants.host}/api/thought_leaders/$user")
+    //val res = LibCurlHttp.get(s"${Constants.host}/api/thought_leaders/$user")
     parser.parse(res).flatMap(_.as[User]).toTry.get
 
   case class State(

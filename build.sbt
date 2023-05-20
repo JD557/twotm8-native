@@ -5,10 +5,10 @@ scalaVersion := "3.2.2"
 
 enablePlugins(ScalaNativePlugin)
 libraryDependencies ++= List(
-  "eu.joaocosta" %%% "minart"        % "0.5.0-RC1",
-  "io.circe"     %%% "circe-core"    % "0.14.3",
-  "io.circe"     %%% "circe-generic" % "0.14.3",
-  "io.circe"     %%% "circe-parser"  % "0.14.3"
+  "eu.joaocosta" %%% "minart"        % "0.5.2",
+  "io.circe"     %%% "circe-core"    % "0.14.5",
+  "io.circe"     %%% "circe-generic" % "0.14.5",
+  "io.circe"     %%% "circe-parser"  % "0.14.5"
 )
 
 nativeLinkStubs := true

@@ -116,9 +116,9 @@ object MinartBackend extends Backend {
     if (backCtx.canvas.getKeyboardInput().keysPressed(Key.F)) {
       val oldSettings = backCtx.canvas.canvasSettings
       if (oldSettings.fullScreen)
-        backCtx.canvas.changeSettings(oldSettings.copy(fullScreen = false, scale = 1))
+        backCtx.canvas.changeSettings(oldSettings.copy(fullScreen = false))
       else
-        backCtx.canvas.changeSettings(oldSettings.copy(fullScreen = true, scale = 2))
+        backCtx.canvas.changeSettings(oldSettings.copy(fullScreen = true))
     }
   }
 
